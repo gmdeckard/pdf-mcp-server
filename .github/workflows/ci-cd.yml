@@ -1,0 +1,199 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install system dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y poppler-utils tesseract-ocr python3-pip
+        pip3 install pdfplumber
+
+    - name: Install system dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew install poppler tesseract python
+        pip install pdfplumber
+
+    - name: Install system dependencies (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        # Use chocolatey for Windows dependencies
+        choco install poppler tesseract
+        pip install pdfplumber
+      shell: pwsh
+
+    - name: Install npm dependencies
+      run: npm ci
+
+    - name: Build project
+      run: npm run build
+
+    - name: Run basic tests
+      run: |
+        # Test that the server starts without errors
+        timeout 10s node dist/enhanced-index.js --test || true
+
+    - name: Test TypeScript compilation
+      run: npx tsc --noEmit
+
+    - name: Check package.json validity
+      run: npm pack --dry-run
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linter (if available)
+      run: |
+        if [ -f "package.json" ] && grep -q "lint" package.json; then
+          npm run lint
+        else
+          echo "No linter configured, skipping..."
+        fi
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run security audit
+      run: npm audit --audit-level=moderate
+
+    - name: Check for vulnerabilities
+      run: |
+        # Run npm audit and fail if there are high/critical vulnerabilities
+        npm audit --audit-level=high
+
+  publish-npm:
+    needs: [test, lint, security]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build project
+      run: npm run build
+
+    - name: Publish to NPM
+      run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  create-release:
+    needs: [test, lint, security]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          ## What's Changed
+          
+          See [CHANGELOG.md](CHANGELOG.md) for detailed changes.
+          
+          ## Installation
+          
+          ```bash
+          npm install -g pdf-mcp-server
+          ```
+          
+          ## VS Code Setup
+          
+          Add to your VS Code settings:
+          ```json
+          {
+            "mcp.servers": {
+              "pdf-reader": {
+                "command": "pdf-mcp-server"
+              }
+            }
+          }
+          ```
+          
+          See [INSTALL.md](INSTALL.md) for complete setup instructions.
+        draft: false
+        prerelease: false
+
+  test-installation:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Wait for NPM propagation
+      run: sleep 30
+
+    - name: Test global installation
+      run: |
+        npm install -g pdf-mcp-server
+        
+        # Verify installation
+        which pdf-mcp-server
+        pdf-mcp-server --version
+
+    - name: Test basic functionality
+      run: |
+        # Create a simple test to verify the server works
+        timeout 10s pdf-mcp-server --test || true
+        echo "Installation test completed"

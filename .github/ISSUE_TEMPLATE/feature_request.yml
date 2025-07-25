@@ -1,0 +1,157 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for the PDF MCP Server
+title: "[FEATURE] "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please provide details about what you'd like to see added.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of the feature you'd like to see
+      placeholder: "I would like the server to support extracting form data from PDFs..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? What's your use case?
+      placeholder: "Currently, when working with PDF forms, I can't easily extract the field values..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: How do you think this feature should work?
+      placeholder: "Add a new tool called 'extract_pdf_forms' that returns form field names and values..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Have you considered any alternative approaches?
+      placeholder: "I could manually parse the PDF, but that's time-consuming..."
+
+  - type: dropdown
+    id: feature-category
+    attributes:
+      label: Feature Category
+      description: What category does this feature fall into?
+      options:
+        - PDF Processing Enhancement
+        - New Tool/Capability
+        - Performance Improvement
+        - Developer Experience
+        - Documentation
+        - Integration
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature to you?
+      options:
+        - "Low - Nice to have"
+        - "Medium - Would be helpful"
+        - "High - Important for my workflow"
+        - "Critical - Blocking my work"
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story
+      description: Write a user story describing how this feature would be used
+      placeholder: "As a researcher using GitHub Copilot, I want to extract form data from PDFs so that I can quickly analyze survey responses..."
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What would need to be true for this feature to be considered complete?
+      placeholder: |
+        - [ ] New tool `extract_pdf_forms` is available
+        - [ ] Tool returns structured form field data
+        - [ ] Works with common PDF form formats
+        - [ ] Includes proper error handling
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ] 
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Estimated Complexity
+      description: How complex do you think this feature would be to implement?
+      options:
+        - "Simple - Small change or addition"
+        - "Medium - Moderate development effort"
+        - "Complex - Significant development work"
+        - "Unknown - Not sure"
+
+  - type: textarea
+    id: technical-considerations
+    attributes:
+      label: Technical Considerations
+      description: Any technical details or constraints to consider?
+      placeholder: "This might require a new Python dependency for form processing..."
+
+  - type: checkboxes
+    id: feature-scope
+    attributes:
+      label: Feature Scope
+      description: What aspects should this feature cover?
+      options:
+        - label: "New MCP tool"
+        - label: "Enhancement to existing tool"
+        - label: "Configuration option"
+        - label: "Performance optimization"
+        - label: "New dependency"
+        - label: "Documentation update"
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Usage Examples
+      description: Provide examples of how this feature would be used
+      placeholder: |
+        ```
+        User: "Extract the form data from application.pdf"
+        Copilot: Uses extract_pdf_forms tool and returns:
+        - Name: John Doe
+        - Email: john@example.com
+        - Date: 2024-01-15
+        ```
+
+  - type: checkboxes
+    id: research
+    attributes:
+      label: Research Done
+      description: Have you researched this feature?
+      options:
+        - label: "I have searched for existing similar features"
+        - label: "I have looked for existing libraries that could help"
+        - label: "I have checked if this is technically feasible"
+        - label: "I have considered the impact on existing functionality"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other information that would help understand this feature request
+      placeholder: "Screenshots, links to relevant documentation, similar features in other tools..."

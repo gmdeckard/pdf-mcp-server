@@ -1,0 +1,60 @@
+{
+  "name": "pdf-mcp-server",
+  "version": "1.0.0",
+  "description": "Enhanced PDF MCP Server for reading, analyzing, and extracting content from PDF files including text, tables, and images with OCR capabilities",
+  "main": "dist/enhanced-index.js",
+  "bin": {
+    "pdf-mcp-server": "dist/enhanced-index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/enhanced-index.js",
+    "dev": "tsc --watch",
+    "test": "node test.js",
+    "install-extras": "echo 'Install Python dependencies manually: pip install pdfplumber' && echo 'Install system tools: apt-get install poppler-utils tesseract-ocr'",
+    "prepack": "npm run build && npm run test",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "pdf",
+    "pdf-reader",
+    "ocr",
+    "table-extraction",
+    "image-extraction",
+    "github-copilot",
+    "claude-desktop",
+    "ai-assistant"
+  ],
+  "author": "GitHub Copilot Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/pdf-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/pdf-mcp-server/issues"
+  },
+  "homepage": "https://github.com/your-username/pdf-mcp-server#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "README.md",
+    "INSTALL.md",
+    "LICENSE"
+  ],
+  "devDependencies": {
+    "@types/pdf-parse": "^1.1.5",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "@types/node": "^24.1.0",
+    "pdf-parse": "^1.1.1",
+    "zod": "^3.25.76"
+  }
+}

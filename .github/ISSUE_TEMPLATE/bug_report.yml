@@ -1,0 +1,174 @@
+name: Bug Report
+description: Report a bug or issue with the PDF MCP Server
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the information below to help us resolve the issue quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: "The server crashes when trying to read PDF files with..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Install the server with 'npm install -g pdf-mcp-server'
+        2. Configure VS Code settings
+        3. Ask GitHub Copilot to read a PDF
+        4. See error
+      value: |
+        1. 
+        2. 
+        3. 
+        4. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen.
+      placeholder: "The PDF should be read and its content returned to GitHub Copilot"
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: A clear and concise description of what actually happened.
+      placeholder: "The server returns an error message and crashes"
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-message
+    attributes:
+      label: Error Message
+      description: If applicable, paste the full error message and stack trace
+      render: shell
+      placeholder: "Error: Failed to parse PDF: ..."
+
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - Windows 10/11
+        - macOS (Intel)
+        - macOS (Apple Silicon)
+        - Ubuntu/Debian
+        - Other Linux
+        - WSL (Windows Subsystem for Linux)
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version
+      description: What version of Node.js are you running? (run `node --version`)
+      placeholder: "v20.10.0"
+    validations:
+      required: true
+
+  - type: input
+    id: npm-version
+    attributes:
+      label: NPM Version
+      description: What version of NPM are you using? (run `npm --version`)
+      placeholder: "10.2.3"
+    validations:
+      required: true
+
+  - type: input
+    id: vscode-version
+    attributes:
+      label: VS Code Version
+      description: What version of VS Code are you using?
+      placeholder: "1.85.0"
+    validations:
+      required: true
+
+  - type: input
+    id: server-version
+    attributes:
+      label: PDF MCP Server Version
+      description: What version of the PDF MCP Server are you using? (run `pdf-mcp-server --version`)
+      placeholder: "1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: pdf-type
+    attributes:
+      label: PDF Type
+      description: What type of PDF file are you trying to process?
+      options:
+        - Text-based PDF (searchable)
+        - Scanned PDF (image-based)
+        - Mixed content PDF
+        - Encrypted/Password protected PDF
+        - Large PDF (>50MB)
+        - Unknown/Not sure
+    validations:
+      required: false
+
+  - type: textarea
+    id: vs-code-settings
+    attributes:
+      label: VS Code MCP Configuration
+      description: Please share your VS Code MCP server configuration
+      render: json
+      placeholder: |
+        {
+          "mcp.servers": {
+            "pdf-reader": {
+              "command": "pdf-mcp-server",
+              "cwd": "/path/to/pdfs"
+            }
+          }
+        }
+
+  - type: checkboxes
+    id: enhanced-features
+    attributes:
+      label: Enhanced Features Installed
+      description: Which enhanced features do you have installed?
+      options:
+        - label: "pdfplumber (Python library for table extraction)"
+        - label: "poppler-utils (for image extraction)"
+        - label: "tesseract OCR (for image text recognition)"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here (screenshots, related issues, etc.)
+      placeholder: "This started happening after updating to version..."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Please confirm you have done the following
+      options:
+        - label: "I have searched for existing issues before creating this one"
+          required: true
+        - label: "I have provided all the requested information above"
+          required: true
+        - label: "I can reproduce this issue consistently"
+          required: false
