@@ -11,9 +11,7 @@
     "start": "node dist/enhanced-index.js",
     "dev": "tsc --watch",
     "postinstall": "node setup-dependencies.js",
-    "install-python-deps": "pip install pdfplumber",
-    "install-system-deps": "echo 'Installing system dependencies...' && (command -v apt-get >/dev/null && sudo apt-get update && sudo apt-get install -y poppler-utils tesseract-ocr) || (command -v brew >/dev/null && brew install poppler tesseract) || echo 'Please install poppler-utils and tesseract-ocr manually for your system'",
-    "setup": "npm install && npm run install-python-deps && npm run install-system-deps && npm run build",
+    "setup": "npm install && npm run build",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

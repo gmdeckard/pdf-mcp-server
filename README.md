@@ -6,48 +6,50 @@ A Model Context Protocol (MCP) server that enables AI assistants like GitHub Cop
 
 - Extract text from PDF files
 - Support for password-protected PDFs
-- Extract tables with enhanced detection (pdfplumber)
-- Extract images and perform OCR on scanned documents (tesseract)
+- Extract tables with enhanced detection using pdfplumber
+- Extract images and perform OCR on scanned documents using tesseract
 - Analyze PDF structure and metadata
 - Memory optimization for large files
+- Automatic Python virtual environment setup
+- Cross-platform support (Linux, macOS, Windows)
 
 ## Quick Start
 
-### 1. Complete Installation (Recommended)
+### Installation
 
 ```bash
 # Clone the repository
 git clone https://github.com/gmdeckard/pdf-mcp-server.git
 cd pdf-mcp-server
 
-# Complete setup with all features
-npm run setup
-```
-
-This will install all dependencies including:
-- Node.js dependencies
-- Python pdfplumber for enhanced table extraction
-- System tools (poppler-utils, tesseract-ocr) for OCR and image extraction
-
-### 2. Manual Installation
-
-If you prefer manual installation:
-
-```bash
-# Install Node.js dependencies
+# Install all dependencies (creates Python venv automatically)
 npm install
 
-# Install Python dependencies
-pip install pdfplumber
+# Build the server
+npm run build
+```
 
-# Install system dependencies
+The installation automatically:
+- Creates a Python virtual environment in ./venv/
+- Installs pdfplumber for enhanced table extraction
+- Attempts to install system dependencies (poppler-utils, tesseract-ocr)
+- Falls back gracefully if optional dependencies cannot be installed
+
+### Manual System Dependencies (if needed)
+
+If the automatic installation fails for system dependencies:
+
+```bash
 # Ubuntu/Debian:
-sudo apt install poppler-utils tesseract-ocr
+sudo apt-get install poppler-utils tesseract-ocr
 
 # macOS:
 brew install poppler tesseract
 
-# Build the server
+# Windows:
+# Install poppler: https://github.com/oschwartz10612/poppler-windows
+# Install tesseract: https://github.com/UB-Mannheim/tesseract/wiki
+```
 npm run build
 ```
 

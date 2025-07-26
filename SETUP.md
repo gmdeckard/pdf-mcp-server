@@ -2,47 +2,36 @@
 
 ## Overview
 
-This guide provides step-by-step instructions for setting up the PDF MCP Server with all advanced features enabled by default.
+This guide provides step-by-step instructions for setting up the PDF MCP Server with all advanced features. The server uses a Python virtual environment to avoid system package conflicts and provides graceful fallbacks for optional features.
 
 ## Prerequisites
 
 - Node.js 16.0.0 or higher
 - Python 3.x (for enhanced table extraction)
-- Package manager access (for system dependencies)
+- Package manager access for system dependencies (optional)
 
-## Installation Options
+## Installation
 
-### Option 1: Automated Setup (Recommended)
+### Quick Setup
 
 ```bash
 # Clone the repository
 git clone https://github.com/gmdeckard/pdf-mcp-server.git
 cd pdf-mcp-server
 
-# Run complete setup
-npm run setup
-```
-
-This single command will:
-1. Install all Node.js dependencies
-2. Install Python pdfplumber for enhanced table extraction
-3. Install system tools (poppler-utils, tesseract-ocr) for OCR
-4. Build the TypeScript server
-
-### Option 2: Manual Step-by-Step Setup
-
-#### Step 1: Node.js Dependencies
-```bash
+# Install and build (creates Python venv automatically)
 npm install
+npm run build
 ```
 
-#### Step 2: Python Dependencies
-```bash
-# Install pdfplumber for enhanced table extraction
-pip install pdfplumber
-```
+The installation process will:
+1. Install all Node.js dependencies
+2. Create a Python virtual environment in ./venv/
+3. Install pdfplumber in the virtual environment for enhanced table extraction
+4. Attempt to install system dependencies (poppler-utils, tesseract-ocr)
+5. Build the TypeScript server
 
-#### Step 3: System Dependencies
+### Manual System Dependencies (if automatic installation fails)
 
 **Ubuntu/Debian:**
 ```bash
@@ -57,12 +46,7 @@ brew install poppler tesseract
 
 **Windows:**
 - Install poppler: Download from https://poppler.freedesktop.org/
-- Install tesseract: Download from https://github.com/tesseract-ocr/tesseract
-
-#### Step 4: Build Server
-```bash
-npm run build
-```
+- Install tesseract: Download from https://github.com/UB-Mannheim/tesseract/wiki
 
 ## Verification
 
@@ -71,13 +55,20 @@ Test your installation:
 # Start the server
 npm start
 
-# The server should start without errors and display:
-# "PDF MCP Server v2.0 running with enhanced features"
+# Test with a sample PDF (if you have one)
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "read_pdf", "arguments": {"file_path": "your-file.pdf", "max_pages": 1}}}' | node dist/enhanced-index.js
 ```
 
-## Features Enabled
+## Feature Availability
 
-With complete installation, you get:
+The server works with graceful degradation:
+
+**Always Available:**
+- Basic PDF text extraction using pdf-parse
+- Password-protected PDF support
+- File validation and error handling
+
+**Enhanced Features (with dependencies):**
 
 ✅ **Basic PDF reading** - Extract text from standard PDFs  
 ✅ **Password-protected PDFs** - Handle encrypted documents  

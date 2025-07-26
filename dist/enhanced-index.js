@@ -52,13 +52,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-const pdfParse = __importStar(require("pdf-parse"));
+const pdf_parse_1 = __importDefault(require("pdf-parse"));
 const zod_1 = require("zod");
 const util_1 = require("util");
 const child_process_1 = require("child_process");
@@ -240,6 +243,31 @@ function isToolAvailable(tool) {
         }
     });
 }
+function getPythonPath() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Check if we have a virtual environment with pdfplumber
+        if (fs.existsSync('./venv/bin/python3')) {
+            try {
+                yield execAsync('./venv/bin/python3 -c "import pdfplumber"');
+                return './venv/bin/python3';
+            }
+            catch (_a) {
+                // Virtual env exists but pdfplumber not installed
+            }
+        }
+        // Fallback to system python
+        if (yield isToolAvailable('python3')) {
+            try {
+                yield execAsync('python3 -c "import pdfplumber"');
+                return 'python3';
+            }
+            catch (_b) {
+                // pdfplumber not available in system python
+            }
+        }
+        return null;
+    });
+}
 function checkPdfSize(filePath) {
     const stats = fs.statSync(filePath);
     const sizeInMB = stats.size / (1024 * 1024);
@@ -349,7 +377,7 @@ function extractPdfText(filePath_1) {
             }
             let data;
             try {
-                data = yield pdfParse(pdfBuffer, options);
+                data = yield (0, pdf_parse_1.default)(pdfBuffer, options);
             }
             catch (passwordError) {
                 if (passwordError instanceof Error && passwordError.message.includes('password')) {
@@ -435,7 +463,8 @@ function extractPdfTables(filePath, pageNumbers, password) {
         const results = [];
         try {
             // Method 1: Try using pdfplumber via Python if available
-            if (yield isToolAvailable('python3')) {
+            const pythonPath = yield getPythonPath();
+            if (pythonPath) {
                 try {
                     const pdfplumberScript = `
 import sys
@@ -486,7 +515,7 @@ except Exception as e:
                     fs.writeFileSync(tempScriptPath, pdfplumberScript);
                     const pageNumbersArg = pageNumbers ? JSON.stringify(pageNumbers) : 'null';
                     const passwordArg = password || 'null';
-                    const { stdout } = yield execAsync(`python3 ${tempScriptPath} "${filePath}" '${pageNumbersArg}' '${passwordArg}'`);
+                    const { stdout } = yield execAsync(`${pythonPath} ${tempScriptPath} "${filePath}" '${pageNumbersArg}' '${passwordArg}'`);
                     // Clean up temp file
                     fs.unlinkSync(tempScriptPath);
                     const pdfplumberResult = JSON.parse(stdout);
@@ -532,7 +561,7 @@ except Exception as e:
                 if (password) {
                     options.password = password;
                 }
-                const data = yield pdfParse(pdfBuffer, options);
+                const data = yield (0, pdf_parse_1.default)(pdfBuffer, options);
                 const text = data.text;
                 // Use our enhanced table detection
                 const detectedTables = detectTablesFromText(text);

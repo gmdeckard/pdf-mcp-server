@@ -20,7 +20,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import * as fs from "fs";
 import * as path from "path";
-import * as pdfParse from "pdf-parse";
+import pdfParse from "pdf-parse";
 import { z } from "zod";
 import { promisify } from "util";
 import { exec } from "child_process";
@@ -215,6 +215,30 @@ async function isToolAvailable(tool: string): Promise<boolean> {
   }
 }
 
+async function getPythonPath(): Promise<string | null> {
+  // Check if we have a virtual environment with pdfplumber
+  if (fs.existsSync('./venv/bin/python3')) {
+    try {
+      await execAsync('./venv/bin/python3 -c "import pdfplumber"');
+      return './venv/bin/python3';
+    } catch {
+      // Virtual env exists but pdfplumber not installed
+    }
+  }
+  
+  // Fallback to system python
+  if (await isToolAvailable('python3')) {
+    try {
+      await execAsync('python3 -c "import pdfplumber"');
+      return 'python3';
+    } catch {
+      // pdfplumber not available in system python
+    }
+  }
+  
+  return null;
+}
+
 function checkPdfSize(filePath: string): { sizeInMB: number; recommendChunking: boolean } {
   const stats = fs.statSync(filePath);
   const sizeInMB = stats.size / (1024 * 1024);
@@ -344,14 +368,16 @@ async function extractPdfText(filePath: string, maxPages: number = 10, password?
 
     let data: any;
     try {
-      data = await (pdfParse as any)(pdfBuffer, options);
+      data = await pdfParse(pdfBuffer, options);
     } catch (passwordError) {
       if (passwordError instanceof Error && passwordError.message.includes('password')) {
         throw new Error('PDF is password protected. Please provide the correct password using the password parameter.');
       } else {
         throw passwordError;
       }
-    } if (!data.text || data.text.trim().length === 0) {
+    }
+
+    if (!data.text || data.text.trim().length === 0) {
       // Try OCR if no text found (might be scanned PDF)
       if (await isToolAvailable('pdfimages') && await isToolAvailable('tesseract')) {
         console.error('No text found in PDF, attempting OCR extraction...');
@@ -436,7 +462,8 @@ async function extractPdfTables(filePath: string, pageNumbers?: number[], passwo
 
   try {
     // Method 1: Try using pdfplumber via Python if available
-    if (await isToolAvailable('python3')) {
+    const pythonPath = await getPythonPath();
+    if (pythonPath) {
       try {
         const pdfplumberScript = `
 import sys
@@ -489,7 +516,7 @@ except Exception as e:
 
         const pageNumbersArg = pageNumbers ? JSON.stringify(pageNumbers) : 'null';
         const passwordArg = password || 'null';
-        const { stdout } = await execAsync(`python3 ${tempScriptPath} "${filePath}" '${pageNumbersArg}' '${passwordArg}'`);
+        const { stdout } = await execAsync(`${pythonPath} ${tempScriptPath} "${filePath}" '${pageNumbersArg}' '${passwordArg}'`);
 
         // Clean up temp file
         fs.unlinkSync(tempScriptPath);
@@ -538,7 +565,7 @@ except Exception as e:
       if (password) {
         options.password = password;
       }
-      const data = await (pdfParse as any)(pdfBuffer, options);
+      const data = await pdfParse(pdfBuffer, options);
       const text = data.text;
 
       // Use our enhanced table detection

@@ -29,13 +29,20 @@ function installPythonDeps() {
     }
 
     try {
+        // Check if virtual environment exists, create if not
+        if (!fs.existsSync('./venv')) {
+            console.log('📦 Creating Python virtual environment...');
+            execSync(`${python} -m venv venv`, { stdio: 'inherit' });
+        }
+
         console.log('📦 Installing pdfplumber for enhanced table extraction...');
-        execSync(`${python} -m pip install pdfplumber`, { stdio: 'inherit' });
+        execSync(`./venv/bin/pip install pdfplumber`, { stdio: 'inherit' });
         console.log('✅ pdfplumber installed successfully\n');
         return true;
     } catch (error) {
         console.log('⚠️  Failed to install pdfplumber. Enhanced table extraction may not work.');
-        console.log('   You can install it manually with: pip install pdfplumber\n');
+        console.log('   Error details:', error.message);
+        console.log('   You can install it manually with: ./venv/bin/pip install pdfplumber\n');
         return false;
     }
 }
