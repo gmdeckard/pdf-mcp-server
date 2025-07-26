@@ -12,6 +12,7 @@
     "dev": "tsc --watch",
     "postinstall": "node setup-dependencies.js",
     "setup": "npm install && npm run build",
+    "global-install": "npm install -g .",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

@@ -14,11 +14,36 @@ A Model Context Protocol (MCP) server that enables AI assistants like GitHub Cop
 - Cross-platform support (Linux, macOS, Windows including VS Code on Windows)
 - Graceful degradation when optional dependencies are unavailable
 
-## Quick Start
+## Installation Options
 
-### Installation
+### Option 1: Global Installation (Persistent Across Workspaces)
 
-Works on all platforms including VS Code on Windows:
+For a persistent installation that works from any directory:
+
+```bash
+# Clone and install globally
+git clone https://github.com/gmdeckard/pdf-mcp-server.git
+cd pdf-mcp-server
+npm install
+npm run build
+npm install -g .
+
+# Now you can use 'pdf-mcp-server' from anywhere
+pdf-mcp-server
+
+# Or install directly from npm (when published)
+npm install -g pdf-mcp-server
+```
+
+**Important Notes for Global Installation:**
+- The Python virtual environment (`venv/`) stays in the original clone directory
+- Enhanced table extraction with pdfplumber will work as long as the original directory exists
+- If you delete the original directory, only basic PDF reading will work
+- For full portability, ensure Python has pdfplumber installed globally: `pip install pdfplumber`
+
+### Option 2: Local Installation (Per-Project)
+
+For installation in a specific project directory:
 
 ```bash
 # Clone the repository
@@ -30,6 +55,9 @@ npm install
 
 # Build the server
 npm run build
+
+# Run from this directory only
+npm start
 ```
 
 The installation automatically:
@@ -57,11 +85,41 @@ brew install poppler tesseract
 npm run build
 ```
 
-### 3. Configure Your AI Assistant
+## MCP Client Configuration
+
+### Global Installation Configuration
+
+If you installed globally with `npm install -g .`, you can configure your MCP clients to use the server from anywhere:
 
 **For GitHub Copilot (VS Code):**
+```json
+{
+  "mcp.servers": {
+    "pdf-reader": {
+      "command": "pdf-mcp-server",
+      "cwd": "/path/to/your/pdfs"
+    }
+  }
+}
+```
 
-Add to your VS Code `settings.json`:
+**For Claude Desktop:**
+```json
+{
+  "mcpServers": {
+    "pdf-reader": {
+      "command": "pdf-mcp-server",
+      "cwd": "/path/to/your/pdfs"
+    }
+  }
+}
+```
+
+### Local Installation Configuration
+
+If you installed locally, use the full path:
+
+**For GitHub Copilot (VS Code):**
 ```json
 {
   "mcp.servers": {
