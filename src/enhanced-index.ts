@@ -208,7 +208,9 @@ function validateFilePath(filePath: string): string {
 
 async function isToolAvailable(tool: string): Promise<boolean> {
   try {
-    await execAsync(`which ${tool}`);
+    // Use 'where' on Windows, 'which' on Unix-like systems
+    const command = process.platform === 'win32' ? 'where' : 'which';
+    await execAsync(`${command} ${tool}`);
     return true;
   } catch {
     return false;
@@ -217,20 +219,26 @@ async function isToolAvailable(tool: string): Promise<boolean> {
 
 async function getPythonPath(): Promise<string | null> {
   // Check if we have a virtual environment with pdfplumber
-  if (fs.existsSync('./venv/bin/python3')) {
+  // Use platform-specific paths for virtual environment
+  const venvPythonPath = process.platform === 'win32' 
+    ? './venv/Scripts/python.exe' 
+    : './venv/bin/python3';
+    
+  if (fs.existsSync(venvPythonPath)) {
     try {
-      await execAsync('./venv/bin/python3 -c "import pdfplumber"');
-      return './venv/bin/python3';
+      await execAsync(`${venvPythonPath} -c "import pdfplumber"`);
+      return venvPythonPath;
     } catch {
       // Virtual env exists but pdfplumber not installed
     }
   }
   
   // Fallback to system python
-  if (await isToolAvailable('python3')) {
+  const systemPython = process.platform === 'win32' ? 'python' : 'python3';
+  if (await isToolAvailable(systemPython)) {
     try {
-      await execAsync('python3 -c "import pdfplumber"');
-      return 'python3';
+      await execAsync(`${systemPython} -c "import pdfplumber"`);
+      return systemPython;
     } catch {
       // pdfplumber not available in system python
     }

@@ -11,11 +11,14 @@ A Model Context Protocol (MCP) server that enables AI assistants like GitHub Cop
 - Analyze PDF structure and metadata
 - Memory optimization for large files
 - Automatic Python virtual environment setup
-- Cross-platform support (Linux, macOS, Windows)
+- Cross-platform support (Linux, macOS, Windows including VS Code on Windows)
+- Graceful degradation when optional dependencies are unavailable
 
 ## Quick Start
 
 ### Installation
+
+Works on all platforms including VS Code on Windows:
 
 ```bash
 # Clone the repository
@@ -30,7 +33,7 @@ npm run build
 ```
 
 The installation automatically:
-- Creates a Python virtual environment in ./venv/
+- Creates a Python virtual environment in ./venv/ (Windows: venv\Scripts\, Unix: venv/bin/)
 - Installs pdfplumber for enhanced table extraction
 - Attempts to install system dependencies (poppler-utils, tesseract-ocr)
 - Falls back gracefully if optional dependencies cannot be installed
@@ -46,9 +49,10 @@ sudo apt-get install poppler-utils tesseract-ocr
 # macOS:
 brew install poppler tesseract
 
-# Windows:
+# Windows (including VS Code on Windows):
 # Install poppler: https://github.com/oschwartz10612/poppler-windows
 # Install tesseract: https://github.com/UB-Mannheim/tesseract/wiki
+# Note: Basic PDF reading works without these
 ```
 npm run build
 ```
