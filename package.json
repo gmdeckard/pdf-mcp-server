@@ -1,7 +1,7 @@
 {
   "name": "pdf-mcp-server",
-  "version": "1.0.0",
-  "description": "Enhanced PDF MCP Server for reading, analyzing, and extracting content from PDF files including text, tables, and images with OCR capabilities",
+  "version": "2.0.0",
+  "description": "Enhanced PDF MCP Server v2.0 for reading, analyzing, and extracting content from PDF files including password-protected PDFs, text, tables, images with OCR capabilities and memory optimization",
   "main": "dist/enhanced-index.js",
   "bin": {
     "pdf-mcp-server": "dist/enhanced-index.js"
@@ -20,12 +20,17 @@
     "model-context-protocol",
     "pdf",
     "pdf-reader",
+    "password-protected-pdf",
     "ocr",
     "table-extraction",
     "image-extraction",
+    "pdfplumber",
+    "tesseract",
     "github-copilot",
     "claude-desktop",
-    "ai-assistant"
+    "ai-assistant",
+    "document-analysis",
+    "memory-optimization"
   ],
   "author": "GitHub Copilot Community",
   "license": "MIT",
