@@ -1,7 +1,7 @@
 {
   "name": "pdf-mcp-server",
   "version": "2.0.0",
-  "description": "Enhanced PDF MCP Server v2.0 for reading, analyzing, and extracting content from PDF files including password-protected PDFs, text, tables, images with OCR capabilities and memory optimization",
+  "description": "Enhanced PDF MCP Server v2.0 with built-in advanced features including password support, OCR, enhanced table extraction, and image processing - ready to use out of the box",
   "main": "dist/enhanced-index.js",
   "bin": {
     "pdf-mcp-server": "dist/enhanced-index.js"
@@ -10,7 +10,10 @@
     "build": "tsc",
     "start": "node dist/enhanced-index.js",
     "dev": "tsc --watch",
-    "install-extras": "echo 'Install Python dependencies manually: pip install pdfplumber' && echo 'Install system tools: apt-get install poppler-utils tesseract-ocr'",
+    "postinstall": "node setup-dependencies.js",
+    "install-python-deps": "pip install pdfplumber",
+    "install-system-deps": "echo 'Installing system dependencies...' && (command -v apt-get >/dev/null && sudo apt-get update && sudo apt-get install -y poppler-utils tesseract-ocr) || (command -v brew >/dev/null && brew install poppler tesseract) || echo 'Please install poppler-utils and tesseract-ocr manually for your system'",
+    "setup": "npm install && npm run install-python-deps && npm run install-system-deps && npm run build",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -46,8 +49,9 @@
   "files": [
     "dist/**/*",
     "src/**/*",
+    "setup-dependencies.js",
     "README.md",
-    "INSTALL.md",
+    "SETUP.md",
     "LICENSE"
   ],
   "devDependencies": {

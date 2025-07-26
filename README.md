@@ -1,48 +1,54 @@
 # PDF MCP Server
 
-A Model Context Protocol (MCP) server that enables AI assistants like GitHub Copilot and Claude Desktop to read and analyze PDF files.
+A Model Context Protocol (MCP) server that enables AI assistants like GitHub Copilot and Claude Desktop to read and analyze PDF files with advanced features including password support, OCR, and enhanced table extraction.
 
 ## Features
 
 - Extract text from PDF files
 - Support for password-protected PDFs
-- Extract tables with enhanced detection
-- Extract images and perform OCR on scanned documents
+- Extract tables with enhanced detection (pdfplumber)
+- Extract images and perform OCR on scanned documents (tesseract)
 - Analyze PDF structure and metadata
 - Memory optimization for large files
 
 ## Quick Start
 
-### 1. Installation
+### 1. Complete Installation (Recommended)
 
 ```bash
 # Clone the repository
 git clone https://github.com/gmdeckard/pdf-mcp-server.git
 cd pdf-mcp-server
 
-# Install dependencies
+# Complete setup with all features
+npm run setup
+```
+
+This will install all dependencies including:
+- Node.js dependencies
+- Python pdfplumber for enhanced table extraction
+- System tools (poppler-utils, tesseract-ocr) for OCR and image extraction
+
+### 2. Manual Installation
+
+If you prefer manual installation:
+
+```bash
+# Install Node.js dependencies
 npm install
+
+# Install Python dependencies
+pip install pdfplumber
+
+# Install system dependencies
+# Ubuntu/Debian:
+sudo apt install poppler-utils tesseract-ocr
+
+# macOS:
+brew install poppler tesseract
 
 # Build the server
 npm run build
-```
-
-### 2. Install Optional Dependencies
-
-For enhanced features, install these optional tools:
-
-**For advanced table extraction:**
-```bash
-pip install pdfplumber
-```
-
-**For image extraction and OCR:**
-```bash
-# Ubuntu/Debian
-sudo apt install poppler-utils tesseract-ocr
-
-# macOS
-brew install poppler tesseract
 ```
 
 ### 3. Configure Your AI Assistant
