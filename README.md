@@ -1,23 +1,160 @@
-# PDF MCP Server v2.0
+# PDF MCP Server
 
-A comprehensive Model Context Protocol (MCP) server that enables AI assistants like GitHub Copilot and Claude Desktop to read, analyze, and extract content from PDF files including text, tables, images, and document structure.
+A Model Context Protocol (MCP) server that enables AI assistants like GitHub Copilot and Claude Desktop to read and analyze PDF files.
 
 ## Features
 
-### Core Capabilities (Zero Setup Required)
-- **Text Extraction**: Extract and read text content from PDF files
-- **Password-Protected PDFs**: Support for encrypted/password-protected documents
-- **Table Detection**: Identify table-like structures using enhanced text pattern analysis
-- **Document Structure Analysis**: Analyze PDF metadata, page count, and content organization
-- **Page-Specific Processing**: Extract content from specific pages or page ranges
-- **Memory Optimization**: Efficient processing of large PDF files (50MB+)
-- **Automatic OCR Fallback**: Automatically attempts OCR for scanned documents
+- Extract text from PDF files
+- Support for password-protected PDFs
+- Extract tables with enhanced detection
+- Extract images and perform OCR on scanned documents
+- Analyze PDF structure and metadata
+- Memory optimization for large files
 
-### Enhanced Capabilities (With Optional Dependencies)
-- **Advanced Table Extraction**: Extract structured tables using pdfplumber
-- **Image Extraction**: Extract images using poppler-utils  
-- **OCR Processing**: Extract text from images using Tesseract OCR
-- **Comprehensive Analysis**: Full document structure analysis with all capabilities
+## Quick Start
+
+### 1. Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/gmdeckard/pdf-mcp-server.git
+cd pdf-mcp-server
+
+# Install dependencies
+npm install
+
+# Build the server
+npm run build
+```
+
+### 2. Install Optional Dependencies
+
+For enhanced features, install these optional tools:
+
+**For advanced table extraction:**
+```bash
+pip install pdfplumber
+```
+
+**For image extraction and OCR:**
+```bash
+# Ubuntu/Debian
+sudo apt install poppler-utils tesseract-ocr
+
+# macOS
+brew install poppler tesseract
+```
+
+### 3. Configure Your AI Assistant
+
+**For GitHub Copilot (VS Code):**
+
+Add to your VS Code `settings.json`:
+```json
+{
+  "mcp.servers": {
+    "pdf-reader": {
+      "command": "node",
+      "args": ["/path/to/pdf-mcp-server/dist/enhanced-index.js"],
+      "cwd": "/path/to/your/pdfs"
+    }
+  }
+}
+```
+
+**For Claude Desktop:**
+
+Add to `~/.config/claude-desktop/config.json`:
+```json
+{
+  "mcpServers": {
+    "pdf-reader": {
+      "command": "node",
+      "args": ["/path/to/pdf-mcp-server/dist/enhanced-index.js"],
+      "cwd": "/path/to/your/pdfs"
+    }
+  }
+}
+```
+
+## Usage
+
+Once configured, you can ask your AI assistant:
+
+- "Read this PDF and summarize it"
+- "Extract all tables from this document"
+- "What images are in this PDF?"
+- "Analyze the structure of this document"
+
+## Available Tools
+
+### read_pdf
+Extract text content from PDF files.
+
+```json
+{
+  "name": "read_pdf",
+  "arguments": {
+    "file_path": "./document.pdf",
+    "max_pages": 10,
+    "password": "optional_password"
+  }
+}
+```
+
+### extract_pdf_tables
+Extract tables from PDF files.
+
+```json
+{
+  "name": "extract_pdf_tables",
+  "arguments": {
+    "file_path": "./report.pdf",
+    "page_numbers": [1, 2, 3],
+    "password": "optional_password"
+  }
+}
+```
+
+### extract_pdf_images
+Extract images and perform OCR.
+
+```json
+{
+  "name": "extract_pdf_images",
+  "arguments": {
+    "file_path": "./document.pdf",
+    "ocr_enabled": true,
+    "password": "optional_password"
+  }
+}
+```
+
+### analyze_pdf_structure
+Analyze PDF structure and metadata.
+
+```json
+{
+  "name": "analyze_pdf_structure",
+  "arguments": {
+    "file_path": "./document.pdf",
+    "include_text": true,
+    "include_images": true,
+    "include_tables": true,
+    "password": "optional_password"
+  }
+}
+```
+
+## Requirements
+
+- Node.js 16.0.0 or higher
+- Optional: Python 3 with pdfplumber for advanced table extraction
+- Optional: poppler-utils and tesseract-ocr for image processing and OCR
+
+## License
+
+MIT
 
 ## Installation
 

@@ -1,52 +1,60 @@
-# Contributing to PDF MCP Server
+# Contributing
 
-Thank you for your interest in contributing to the PDF MCP Server! This project enables GitHub Copilot and other AI assistants to read and analyze PDF documents through the Model Context Protocol.
+Thank you for your interest in contributing to the PDF MCP Server!
 
-## 🤝 How to Contribute
+## Getting Started
 
-### Types of Contributions Welcome
+1. Fork the repository
+2. Clone your fork: `git clone https://github.com/your-username/pdf-mcp-server.git`
+3. Install dependencies: `npm install`
+4. Build the project: `npm run build`
+5. Make your changes
+6. Test your changes
+7. Submit a pull request
 
-- **Bug fixes** - Fix issues with PDF parsing, error handling, or MCP protocol compliance
-- **Feature enhancements** - Add new PDF analysis capabilities, improve text extraction, etc.
-- **Documentation** - Improve setup guides, API documentation, or usage examples
-- **Testing** - Add test cases, improve test coverage, or test with different PDF types
-- **Performance** - Optimize PDF processing, reduce memory usage, or improve response times
+## Development Setup
 
-## 🚀 Getting Started
+### Required
+- Node.js 16.0.0 or higher
+- npm
 
-### Development Setup
+### Optional (for enhanced features)
+- Python 3 with pdfplumber: `pip install pdfplumber`
+- poppler-utils: `sudo apt install poppler-utils` (Ubuntu) or `brew install poppler` (macOS)
+- tesseract-ocr: `sudo apt install tesseract-ocr` (Ubuntu) or `brew install tesseract` (macOS)
 
-1. **Fork and clone the repository**
-   ```bash
-   git clone https://github.com/your-username/pdf-mcp-server.git
-   cd pdf-mcp-server
-   ```
+## Project Structure
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+```
+src/
+├── enhanced-index.ts     # Main server implementation
+└── ...
 
-3. **Install system dependencies** (for enhanced features)
-   ```bash
-   # Ubuntu/Debian
-   sudo apt-get install -y poppler-utils tesseract-ocr python3-pip
-   pip3 install pdfplumber
+dist/                     # Compiled JavaScript
+package.json
+README.md
+SETUP.md
+```
 
-   # macOS
-   brew install poppler tesseract python
-   pip install pdfplumber
-   ```
+## Pull Request Guidelines
 
-4. **Build the project**
-   ```bash
-   npm run build
-   ```
+- Keep changes focused and small
+- Include tests if applicable
+- Update documentation as needed
+- Follow the existing code style
+- Write clear commit messages
 
-5. **Test your installation**
-   ```bash
-   node dist/enhanced-index.js --test
-   ```
+## Reporting Issues
+
+Please use GitHub Issues to report bugs or request features. Include:
+- Clear description of the issue
+- Steps to reproduce (for bugs)
+- Expected vs actual behavior
+- Your environment details (OS, Node.js version, etc.)
+
+## Questions?
+
+Open a GitHub Discussion or create an issue for questions about contributing.
 
 ### Project Structure
 

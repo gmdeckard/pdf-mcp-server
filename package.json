@@ -10,9 +10,7 @@
     "build": "tsc",
     "start": "node dist/enhanced-index.js",
     "dev": "tsc --watch",
-    "test": "node test.js",
     "install-extras": "echo 'Install Python dependencies manually: pip install pdfplumber' && echo 'Install system tools: apt-get install poppler-utils tesseract-ocr'",
-    "prepack": "npm run build && npm run test",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

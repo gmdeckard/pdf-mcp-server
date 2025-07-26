@@ -1,42 +1,27 @@
 # Changelog
 
-All notable changes to the PDF MCP Server will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ## [2.0.0] - 2025-07-26
 
 ### Added
-- **Password-protected PDF support**: All tools now accept an optional `password` parameter for encrypted PDFs
-- **Automatic OCR fallback**: When no text is found in PDFs (scanned documents), the server automatically attempts OCR extraction  
-- **Enhanced table detection**: Improved text-based algorithms with better pattern recognition for currency, percentages, and structured data
-- **Memory optimization**: Large PDF files (>50MB) are processed with memory optimization techniques and chunking recommendations
-- **Dual processing methods**: Tables can be extracted using both enhanced text analysis and pdfplumber for maximum compatibility
-- **Comprehensive testing**: Added `test-enhanced.js` for testing all v2.0 features
-- **Enhanced documentation**: Updated README with v2.0 features, removed fancy icons, added clear examples
-
-### Enhanced  
-- **Error handling**: Better error messages and graceful degradation when optional dependencies are missing
-- **Tool descriptions**: More detailed parameter descriptions and usage examples for all tools
-- **File validation**: Improved file path validation and error reporting with specific PDF format checking
-- **Performance**: Better handling of large files with size warnings and processing optimization
-- **TypeScript implementation**: Enhanced type safety and better error handling throughout
+- Password-protected PDF support for all tools
+- Automatic OCR fallback for scanned documents  
+- Enhanced table detection with improved pattern recognition
+- Memory optimization for large PDF files
+- Better error handling and graceful degradation
 
 ### Fixed
-- **Password error detection**: Specific handling for password-related PDF parsing errors with user-friendly messages
-- **OCR integration**: More robust OCR processing with proper cleanup of temporary files and better error handling
-- **Table formatting**: Better markdown table formatting from detected text structures with improved column detection
-- **Memory management**: Proper cleanup of temporary directories and files after processing
+- Improved PDF parsing error messages
+- Better cleanup of temporary files
+- Enhanced table formatting
 
-### Technical Changes
-- Updated server name to `enhanced-pdf-mcp-server-v2` version 2.0.0
-- Enhanced TypeScript implementation with improved type definitions
-- Better logging to stderr to avoid corrupting JSON-RPC messages  
-- All tools now support password parameter consistently
-- Improved documentation structure and examples
+## [1.0.0] - 2024
 
-## [1.0.0] - 2024-12-XX
+### Added
+- Initial release with basic PDF reading capabilities
+- Text extraction from PDF files
+- Simple table detection
+- Image extraction with OCR support
+- Document structure analysis
 
 ### Added
 - 🎉 **Initial Release** - PDF MCP Server for GitHub Copilot integration
